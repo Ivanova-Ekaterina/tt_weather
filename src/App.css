@@ -31,3 +31,20 @@
     transform: rotate(360deg);
   }
 }
+ul{
+  height: 610px;
+  margin: 0px;
+  padding: 0px;
+}
+li{
+  width: 360px;
+  height: 50px;
+  background-color: white;
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+  border: 1px #8e24aa;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}

@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
+import { BrowserRouter as Router, Route} from 'react-router-dom';
 import './App.css';
+import CityList from "./components/CityList/CityList";
+import City from "./components/city/city";
+import connect from "react-redux/es/connect/connect";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+    render() {
+        const props = this.props;
+        return <Router>
+            <div>
+                <Route exact path='/' component={CityList}/>
+                {props.cities !== undefined ?  (props.cities.map((el, id) =>
+                        <Route exact  key={id+5000} path={`/${el}`} render={() =><City key={id} city={props.city.name} temperature={props.city.temperature} pressure={props.city.pressure}/>} />))
+                    : ''}
+            </div>
+        </Router>
+    }
 }
 
-export default App;
+const mapStateToProps = state => {
+    return {
+        cities: state.cityList.cityList,
+        city: state.city
+    }
+};
+
+
+export default connect(mapStateToProps)(App);
+
