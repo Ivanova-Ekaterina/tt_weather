@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
 import connect from "react-redux/es/connect/connect";
 import * as actionTypes from "../../store/actions/actionTypes";
 
@@ -7,8 +8,8 @@ class City extends Component {
         super(props);
         this.state = { error: null, eventId: null };
     }
-    componentWillMount() {
-        fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${window.location.pathname.substring(1)}&appid=b41984b8b5135f1695c5faac30990138`)
+    componentDidMount() {
+        fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${this.props.city.name}&appid=b41984b8b5135f1695c5faac30990138`)
             .then(response => response.json())
             .then(data => {
                 this.props.loadCity(data.city.name, data.list[0].main.pressure, data.list[0].main.temp);
@@ -19,30 +20,32 @@ class City extends Component {
                 this.setState({error: true});
 
             });
-
     }
     render() {
-        const props = this.props;
+        const city = this.props.city;
         if (!this.state.error) {
             return (
-                <div onLoad={() => this.componentWillMount(props.city.name)}>
+                <div>
                     <div className="City">
                         <label>
                             City:
                         </label>
-                        {props.city.name}
+                        {city.name}
                     </div>
                     <div className="City">
                         <label>
                             Temperature:
                         </label>
-                        {props.city.temperature}
+                        {city.temperature}
                     </div>
                     <div className="City">
                         <label>
                             Pressure:
                         </label>
-                        {props.city.pressure}
+                        {city.pressure}
+                    </div>
+                    <div>
+                        <Link to='/'><input type="button" value="Back to list"/></Link>
                     </div>
                 </div>);
         }
