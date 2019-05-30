@@ -1,29 +1,18 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import connect from "react-redux/es/connect/connect";
-import * as actionTypes from "../../store/actions/actionTypes";
+import {getCityWeather} from "../../store/actions/WheatherService";
 
 class City extends Component {
     constructor(props) {
         super(props);
-        this.state = { error: null, eventId: null };
     }
     componentDidMount() {
-        fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${this.props.city.name}&appid=b41984b8b5135f1695c5faac30990138`)
-            .then(response => response.json())
-            .then(data => {
-                this.props.loadCity(data.city.name, data.list[0].main.pressure, data.list[0].main.temp);
-                this.setState({error: false});
-            })
-            .catch(error => {
-                console.log(error.toString());
-                this.setState({error: true});
-
-            });
+            this.props.onSelectCity(this.props.city.name);
     }
     render() {
         const city = this.props.city;
-        if (!this.state.error) {
+        if (!city.error) {
             return (
                 <div>
                     <div className="City">
@@ -65,7 +54,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        loadCity: (city, pressure, temperature) => dispatch({type: actionTypes.CHOOSE_CITY, name: city, pressure: pressure, temperature: temperature}),
+        onSelectCity: (city) => dispatch(getCityWeather(city)),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(City);
